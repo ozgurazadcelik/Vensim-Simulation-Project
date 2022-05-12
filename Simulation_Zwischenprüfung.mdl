@@ -1,0 +1,286 @@
+{UTF-8}
+Austrittsquote=
+	Belegschaft/Zeitraum der durchschnittlichen Beschäftigung
+	~	person/woche
+	~		|
+
+Auswirkung des Fahrplandrucks=
+	Tabelle 1(Termindruck)
+	~	Dmnl
+	~		|
+
+Belegschaft= INTEG (
+	Einstellungsrate-Austrittsquote,
+		50)
+	~	person
+	~		|
+
+Belegschaftskorrektur=
+	(Gewünschte Arbeitskräfte-Belegschaft)/"Zeitraum, um neue Arbeitskräfte einzustellen"
+	~	person/woche
+	~		|
+
+Bestand= INTEG (
+	Produktion-Versand,
+		4000)
+	~	einheiten
+	~	Der anfängliche Lagerbestand umfasst Lieferungen von vier Wochen (1.000 x \
+		4 = 4.000)
+	|
+
+Bestandskorrektur=
+	(Gewünschter Lagerbestand-Bestand)/Zeitraum für Inventarabgleich
+	~	einheiten/woche
+	~	Innerhalb von acht Wochen versucht das Unternehmen, Abweichungen zwischen \
+		Soll- und Ist-Bestand zu korrigieren.
+	|
+
+Durchschnittliche Bestellrate=
+	SMOOTH(Kundenaufträge, Zeitraum für die Mittelwertbildung der Bestellungen)
+	~	einheiten/woche
+	~	Das Unternehmen prognostiziert die Lieferungen, indem es den Durchschnitt \
+		vergangener Bestellungen über einen Zeitraum von acht Wochen berechnet, \
+		um jegliche Geräusche oder Klumpen bei der Nachfrage zu glätten.
+	|
+
+Durchschnittliche Produktivität=
+	20
+	~	person/woche
+	~		|
+
+Einstellungsrate=
+	Belegschaftskorrektur+Austrittsquote
+	~	person/woche
+	~		|
+
+Gewünschte Arbeitskräfte=
+	Gewünschte Produktion/Durchschnittliche Produktivität
+	~	person
+	~		|
+
+Gewünschte Produktion=
+	Bestandskorrektur+Durchschnittliche Bestellrate
+	~	einheiten/woche
+	~	Die gewünschte Produktion wird durch erwartete Lieferungen bestimmt, die \
+		durch eine Korrektur modifiziert werden, um den Lagerbestand auf dem \
+		gewünschten Niveau zu halten.
+	|
+
+Gewünschter Lagerbestand=
+	Zeitraum für Lagerbestände*Durchschnittliche Bestellrate
+	~	einheiten
+	~	Der gewünschte Lagerbestand beträgt vier Wochen der erwarteten \
+		Lieferungen.
+	|
+
+Kundenaufträge=
+	1000*(1+step(0.1,10))
+	~	einheiten/woche
+	~	In diesem Modell entsprechen Kundenbestellungen einer konstanten \
+		Bestellrate (von 1.000 Einheiten/Woche) bis Periode 10, wenn die \
+		Bestellungen um 10 % steigen, und bleiben dann bei der höheren Rate.
+	|
+
+Produktion=
+	Auswirkung des Fahrplandrucks*Produktionsrate
+	~	einheiten/woche
+	~		|
+
+Produktionsrate=
+	Durchschnittliche Produktivität*Belegschaft
+	~	einheiten/woche
+	~		|
+
+Tabelle 1(
+	(0.8,0.875),(0.9,0.875),(1,1),(1.1,1.25),(1.2,1.25))
+	~	Dmnl
+	~		|
+
+Termindruck=
+	Gewünschte Produktion/Produktionsrate
+	~	Dmnl
+	~	Der Termindruck ist das Verhältnis von gewünschter zu normaler \
+		Produktion und misst den Bedarf an Überstunden.
+	|
+
+Versand=
+	Kundenaufträge
+	~	einheiten/woche
+	~		|
+
+Zeitraum der durchschnittlichen Beschäftigung=
+	50
+	~	woche
+	~	Durchschnittliche Beschäftigungsdauer
+	|
+
+Zeitraum für die Mittelwertbildung der Bestellungen=
+	8
+	~	woche
+	~	Zeit bis zur durchschnittlichen Bestellrate
+	|
+
+Zeitraum für Inventarabgleich=
+	8
+	~	woche
+	~	Zeit, Inventar zu korrigieren
+	|
+
+Zeitraum für Lagerbestände=
+	4
+	~	woche
+	~	Gewünschte Bestandsabdeckung
+	|
+
+"Zeitraum, um neue Arbeitskräfte einzustellen"=
+	24
+	~	woche
+	~	Zeit, die Arbeit zu korrigieren
+	|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Week
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Week
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Week [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Week [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,90,0
+10,1,Bestand,161,327,40,20,3,3,0,0,0,0,0,0,0,0,0,0,0,0
+12,2,48,159,503,12,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,3,5,1,4,0,0,22,0,0,0,-1--1--1,,1|(164,365)|
+1,4,5,2,100,0,0,22,0,0,0,-1--1--1,,1|(164,447)|
+11,5,48,164,392,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,6,Produktion,164,409,36,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,7,48,153,153,12,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,8,10,7,4,0,0,22,0,0,0,-1--1--1,,1|(165,153)|
+1,9,10,1,100,0,0,22,0,0,0,-1--1--1,,1|(165,273)|
+11,10,48,165,232,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,11,Versand,165,247,28,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,12,Kundenaufträge,296,180,52,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,13,Zeitraum für Inventarabgleich,481,156,52,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,14,Bestandskorrektur,408,240,60,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,15,1,14,1,0,0,0,0,64,0,-1--1--1,,1|(277,268)|
+1,16,13,14,0,0,0,0,0,64,0,-1--1--1,,1|(445,196)|
+1,17,12,11,1,0,0,0,0,64,0,-1--1--1,,1|(216,195)|
+10,18,Gewünschter Lagerbestand,624,261,44,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,19,18,14,0,0,0,0,0,64,0,-1--1--1,,1|(532,251)|
+10,20,Zeitraum für Lagerbestände,668,172,47,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,21,20,18,0,0,0,0,0,64,0,-1--1--1,,1|(649,212)|
+10,22,Durchschnittliche Bestellrate,837,273,56,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,23,22,18,0,0,0,0,0,64,0,-1--1--1,,1|(731,268)|
+1,24,12,22,1,0,0,0,0,64,0,-1--1--1,,1|(539,88)|
+10,25,Gewünschte Produktion,545,367,40,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,26,22,25,0,0,43,0,2,64,0,-1--1--1,|0||-1--1--1,1|(689,320)|
+1,27,14,25,1,0,43,0,2,64,0,-1--1--1,|0||-1--1--1,1|(460,309)|
+10,28,Termindruck,473,429,41,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,29,Auswirkung des Fahrplandrucks,353,375,52,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,30,28,29,0,0,0,0,0,64,0,-1--1--1,,1|(428,408)|
+1,31,29,6,1,0,0,0,0,64,0,-1--1--1,,1|(281,423)|
+10,32,Tabelle 1,400,312,32,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,33,32,29,0,0,0,0,0,64,0,-1--1--1,,1|(383,333)|
+10,34,Produktionsrate,417,536,52,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,35,34,28,0,0,0,0,0,64,0,-1--1--1,,1|(441,488)|
+1,36,34,6,1,0,0,0,0,64,0,-1--1--1,,1|(268,512)|
+1,37,25,28,0,0,0,0,0,64,0,-1--1--1,,1|(509,397)|
+10,38,Zeitraum für die Mittelwertbildung der Bestellungen,853,137,68,28,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,39,38,22,1,0,0,0,0,64,0,-1--1--1,,1|(880,209)|
+10,40,Gewünschte Arbeitskräfte,643,572,44,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,41,Durchschnittliche Produktivität,560,480,56,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,42,41,40,1,0,0,0,0,64,0,-1--1--1,,1|(593,528)|
+1,43,25,40,1,0,0,0,0,64,0,-1--1--1,,1|(629,460)|
+1,44,41,34,1,0,0,0,0,64,0,-1--1--1,,1|(516,527)|
+10,45,Belegschaftskorrektur,771,416,40,20,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,46,40,45,1,0,0,0,0,64,0,-1--1--1,,1|(685,488)|
+10,47,"Zeitraum, um neue Arbeitskräfte einzustellen",789,545,79,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,48,47,45,1,0,0,0,0,64,0,-1--1--1,,1|(795,481)|
+10,49,Belegschaft,1093,316,40,20,3,3,0,0,0,0,0,0,0,0,0,0,0,0
+12,50,48,1085,509,12,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,51,53,49,4,0,0,22,0,0,0,-1--1--1,,1|(1088,363)|
+1,52,53,50,100,0,0,22,0,0,0,-1--1--1,,1|(1088,456)|
+11,53,48,1088,399,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,54,Einstellungsrate,1088,420,48,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,55,48,1088,141,12,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,56,58,55,4,0,0,22,0,0,0,-1--1--1,,1|(1084,184)|
+1,57,58,49,100,0,0,22,0,0,0,-1--1--1,,1|(1084,268)|
+11,58,48,1084,228,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,59,Austrittsquote,1084,243,44,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,60,Zeitraum der durchschnittlichen Beschäftigung,903,344,56,28,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,61,60,59,1,0,0,0,0,64,0,-1--1--1,,1|(981,276)|
+1,62,49,59,1,0,0,0,0,64,0,-1--1--1,,1|(1145,260)|
+1,63,59,54,1,0,43,0,2,64,0,-1--1--1,|0||-1--1--1,1|(1188,247)|
+1,64,45,54,1,0,43,0,2,64,0,-1--1--1,|0||-1--1--1,1|(988,512)|
+1,65,49,45,1,0,0,0,0,64,0,-1--1--1,,1|(945,433)|
+1,66,49,34,1,0,0,0,0,64,0,-1--1--1,,1|(752,624)|
+12,67,0,292,332,20,20,4,7,0,0,1,0,0,0,0,0,0,0,0,0
+ProdLoop1
+12,68,0,705,604,20,20,4,7,0,0,1,0,0,0,0,0,0,0,0,0
+ProdLoop2
+12,69,0,484,472,20,20,4,7,0,0,1,0,0,0,0,0,0,0,0,0
+ProdLoop3
+12,70,0,1013,429,20,20,5,7,0,0,1,0,0,0,0,0,0,0,0,0
+EinstellungsrateL1
+12,71,0,1168,351,20,20,4,7,0,0,1,0,0,0,0,0,0,0,0,0
+EinstellungsrateL2
+12,72,0,264,463,20,20,4,7,0,0,1,0,0,0,0,0,0,0,0,0
+EinstellungsrateL3
+12,73,0,451,364,20,20,4,7,0,0,1,0,0,0,0,0,0,0,0,0
+EinstellungsrateL4
+///---\\\
+:L<%^E!@
+4:Time
+5:Durchschnittliche Bestellrate
+9:ZeitraumfürLagerbestande2
+19:90,0
+24:0
+25:100
+26:100
+23:0
+15:0,0,0,0,0,0
+27:0,
+34:0,
+42:1
+72:0
+73:0
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:3
+41:0
+95:0
+96:0
+77:0
+78:0
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
